@@ -38,7 +38,6 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'fatih/vim-go'
 
 " Debugger GDB
-Plugin 'rosenfeld/conque-term'
 Plugin 'vim-scripts/Conque-GDB'
 
 let g:ConqueTerm_Color = 2                                                            
