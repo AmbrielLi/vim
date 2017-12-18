@@ -37,31 +37,6 @@ Plugin 'VundleVim/Vundle.vim'
 " vim-go
 Plugin 'fatih/vim-go'
 
-" Debugger GDB
-Plugin 'vim-scripts/Conque-GDB'
-
-let g:ConqueTerm_Color = 2                                                            
-let g:ConqueTerm_CloseOnEnd = 1                                                       
-let g:ConqueTerm_StartMessages = 0                                                    
-                                                                                      
-function DebugSession()                                                               
-    silent make -o vimgdb -gcflags "-N -l"                                            
-    redraw!                                                                           
-    if (filereadable("vimgdb"))                                                       
-        ConqueGdb vimgdb                                                              
-    else                                                                              
-        echom "Couldn't find debug file"                                              
-    endif                                                                             
-endfunction                                                                           
-
-function DebugSessionCleanup(term)                                                    
-    if (filereadable("vimgdb"))                                                       
-        let ds=delete("vimgdb")                                                       
-    endif                                                                             
-endfunction                                                                           
-call conque_term#register_function("after_close", "DebugSessionCleanup")              
-nmap <leader>d :call DebugSession()<CR>;   
-
 " SimpylFold
 Plugin 'tmhedberg/SimpylFold'
 
@@ -91,7 +66,6 @@ Plugin 'altercation/vim-colors-solarized'
 " File Browsing
 Plugin 'scrooloose/nerdtree'
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
-autocmd vimenter * NERDTree
 
 " Tabs
 Plugin 'jistr/vim-nerdtree-tabs'
@@ -105,6 +79,29 @@ Plugin 'tpope/vim-fugitive'
 
 " Powerline
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+
+" GDB
+Plugin 'vim-scripts/Conque-GDB'
+let g:ConqueTerm_Color = 2
+let g:ConqueTerm_CloseOnEnd = 1
+let g:ConqueTerm_StartMessages = 0
+
+function DebugSession()
+	silent make -o vimgdb -gcflags "-N -l"
+	redraw!
+	if (filereadable("vimgdb"))
+		ConqueGdb vimgdb
+	else
+		echom "Couldn't find debug file"
+	endif
+endfunction
+function DebugSessionCleanup(term)
+	if (filereadable("vimgdb"))
+		let ds=delete("vimgdb")
+	endif
+endfunction
+call conque_term#register_function("after_close", "DebugSessionCleanup")
+nmap <leader>d :cal DebugSession()<CR>;
 
 
 " All of your Plugins must be added before the following line
@@ -148,10 +145,10 @@ nnoremap <space> za
 let g:SimpylFold_docstring_preview=1
 
 " PEP8 indentation
-au BufNewFile,BufRead *.py
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
+au BufNewFile,BufRead *.py, *.go
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2 |
     \ set textwidth=79 |
     \ set expandtab |
     \ set autoindent |
